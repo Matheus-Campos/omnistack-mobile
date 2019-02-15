@@ -17,5 +17,8 @@
         "rootPathSuffix": "src"
       }
     }
+  },
+  "globals": {
+    "__DEV__": true
   }
 }
