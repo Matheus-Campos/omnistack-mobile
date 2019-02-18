@@ -1,7 +1,7 @@
 import { all, fork, takeLatest } from 'redux-saga/effects';
 
 import {
-  signIn, signOut, signUp, getPermissions,
+  signIn, signOut, signUp, getPermissions, init,
 } from './auth';
 import { AuthTypes } from '../ducks/auth';
 
@@ -16,6 +16,7 @@ import { AuthTypes } from '../ducks/auth';
 
 export default function* rootSaga() {
   return yield all([
+    init(),
     // fork(getPermissions),
     takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
     takeLatest(AuthTypes.SIGN_OUT, signOut),
