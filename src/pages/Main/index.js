@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import TeamSwitcher from '~/components/TeamSwitcher';
+import Projects from '~/components/Projects';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -71,6 +72,8 @@ class Main extends Component {
                 <Icon name="group" size={24} color="#fff" />
               </TouchableOpacity>
             </View>
+
+            <Projects />
           </View>
         </SideMenu>
       </View>
