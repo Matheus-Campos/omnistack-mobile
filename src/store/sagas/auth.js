@@ -4,12 +4,19 @@ import NavigationService from '~/services/navigation';
 import api from '~/services/api';
 
 import AuthActions from '../ducks/auth';
+import TeamsActions from '../ducks/teams';
 
 export function* init() {
   const token = yield call(AsyncStorage.getItem, '@Omni:token');
 
   if (token) {
     yield put(AuthActions.signInSuccess(token));
+  }
+
+  const activeTeam = yield call(AsyncStorage.getItem, '@Omni:team');
+
+  if (activeTeam) {
+    yield put(TeamsActions.selectTeam(JSON.parse(activeTeam)));
   }
 
   yield put(AuthActions.initCheckSuccess());
