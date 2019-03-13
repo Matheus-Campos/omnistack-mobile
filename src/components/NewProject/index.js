@@ -27,6 +27,8 @@ class NewProject extends Component {
 
     createProjectRequest(newProject);
     onRequestClose();
+
+    this.setState({ newProject: '' });
   };
 
   render() {
@@ -35,7 +37,7 @@ class NewProject extends Component {
 
     return (
       <Modal visible={visible} onRequestClose={onRequestClose}>
-        <Text style={styles.label}>NOME</Text>
+        <Text style={styles.label}>TÍTULO</Text>
 
         <TextInput
           autoFocus

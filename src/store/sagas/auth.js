@@ -1,4 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
+import { ToastActionsCreators } from 'react-native-redux-toast';
 import { AsyncStorage } from 'react-native';
 import NavigationService from '~/services/navigation';
 import api from '~/services/api';
@@ -32,28 +33,12 @@ export function* signIn({ email, password }) {
 
     NavigationService.navigate('Main');
   } catch (err) {
-    console.tron.log('ERRO');
+    yield put(ToastActionsCreators.displayError('Falha na operação'));
   }
 }
 
 export function* signOut() {
   yield call(AsyncStorage.clear);
-
-  // yield put(push('/signin'));
-}
-
-export function* signUp({ name, email, password }) {
-  try {
-    const response = yield call(api.post, 'users', { name, email, password });
-
-    yield call(AsyncStorage.setItem, '@Omni:token', response.data.token);
-
-    yield put(AuthActions.signInSuccess(response.data.token));
-
-    // yield put(push('/'));
-  } catch (err) {
-    console.tron.log('ERRO');
-  }
 }
 
 export function* getPermissions() {

@@ -2,55 +2,58 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, TextInput, TouchableOpacity } from 'react-native';
 
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import TeamsActions from '~/store/ducks/teams';
+import { connect } from 'react-redux';
+import MembersActions from '~/store/ducks/members';
 
 import Modal from '../Modal';
 
 import styles from './styles';
 
-class NewTeam extends Component {
+class InviteMember extends Component {
   static propTypes = {
     visible: PropTypes.bool.isRequired,
     onRequestClose: PropTypes.func.isRequired,
-    createTeamRequest: PropTypes.func.isRequired,
+    inviteMemberRequest: PropTypes.func.isRequired,
   };
 
   state = {
-    newTeam: '',
+    email: '',
   };
 
   handleSubmit = () => {
-    const { createTeamRequest, onRequestClose } = this.props;
-    const { newTeam } = this.state;
+    const { inviteMemberRequest, onRequestClose } = this.props;
+    const { email } = this.state;
 
-    createTeamRequest(newTeam);
+    inviteMemberRequest(email);
     onRequestClose();
 
-    this.setState({ newTeam: '' });
+    this.setState({ email: '' });
   };
 
   render() {
     const { visible, onRequestClose } = this.props;
-    const { newTeam } = this.state;
+    const { email } = this.state;
 
     return (
       <Modal visible={visible} onRequestClose={onRequestClose}>
-        <Text style={styles.label}>NOME</Text>
+        <Text style={styles.label}>E-MAIL</Text>
 
         <TextInput
+          autoCapitalize="none"
+          keyboardType="email-address"
+          autoCorrect={false}
           autoFocus
           underlineColorAndroid="transparent"
           returnKeyType="send"
           onSubmitEditing={this.handleSubmit}
-          value={newTeam}
-          onChangeText={text => this.setState({ newTeam: text })}
+          value={email}
+          onChangeText={text => this.setState({ email: text })}
           style={styles.input}
         />
 
         <TouchableOpacity onPress={this.handleSubmit} style={styles.button}>
-          <Text style={styles.buttonText}>CRIAR TIME</Text>
+          <Text style={styles.buttonText}>CONVIDAR</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={onRequestClose} style={styles.cancel}>
@@ -61,9 +64,9 @@ class NewTeam extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators(TeamsActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(MembersActions, dispatch);
 
 export default connect(
   null,
   mapDispatchToProps,
-)(NewTeam);
+)(InviteMember);
