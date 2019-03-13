@@ -11,6 +11,8 @@ import MembersActions from '~/store/ducks/members';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import InviteMember from '../InviteMember';
+import RoleUpdater from '../RoleUpdater';
+import Can from '../Can';
 
 import styles from './styles';
 
@@ -31,6 +33,8 @@ class Members extends Component {
 
   state = {
     isInviteModalOpen: false,
+    isRoleModalOpen: false,
+    activeMember: null,
   };
 
   componentDidMount() {
@@ -43,9 +47,13 @@ class Members extends Component {
 
   closeInviteModal = () => this.setState({ isInviteModalOpen: false });
 
+  openRoleModal = member => this.setState({ isRoleModalOpen: true, activeMember: member });
+
+  closeRoleModal = () => this.setState({ isRoleModalOpen: false, activeMember: null });
+
   render() {
     const { members } = this.props;
-    const { isInviteModalOpen } = this.state;
+    const { isInviteModalOpen, isRoleModalOpen, activeMember } = this.state;
 
     return (
       <View style={styles.container}>
@@ -59,27 +67,41 @@ class Members extends Component {
             <View style={styles.memberContainer}>
               <Text style={styles.memberName}>{item.user.name}</Text>
 
-              <TouchableOpacity
-                hitSlop={{
-                  top: 5,
-                  bottom: 5,
-                  left: 5,
-                  right: 5,
-                }}
-                onPress={() => {}}
-              >
-                <Icon name="settings" size={20} color="#b0b0b0" />
-              </TouchableOpacity>
+              <Can checkRole="administrator">
+                <TouchableOpacity
+                  hitSlop={{
+                    top: 5,
+                    bottom: 5,
+                    left: 5,
+                    right: 5,
+                  }}
+                  onPress={() => this.openRoleModal(item)}
+                >
+                  <Icon name="settings" size={20} color="#b0b0b0" />
+                </TouchableOpacity>
+              </Can>
             </View>
           )}
           ListFooterComponent={() => (
-            <TouchableOpacity style={styles.button} onPress={this.openInviteModal}>
-              <Text style={styles.buttonText}>CONVIDAR</Text>
-            </TouchableOpacity>
+            <Can checkPermission="invites_create">
+              <TouchableOpacity style={styles.button} onPress={this.openInviteModal}>
+                <Text style={styles.buttonText}>CONVIDAR</Text>
+              </TouchableOpacity>
+            </Can>
           )}
         />
 
-        <InviteMember visible={isInviteModalOpen} onRequestClose={this.closeInviteModal} />
+        {activeMember && (
+          <RoleUpdater
+            visible={isRoleModalOpen}
+            onRequestClose={this.closeRoleModal}
+            member={activeMember}
+          />
+        )}
+
+        <Can checkPermission="invites_create">
+          <InviteMember visible={isInviteModalOpen} onRequestClose={this.closeInviteModal} />
+        </Can>
       </View>
     );
   }

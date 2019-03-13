@@ -11,6 +11,7 @@ import ProjectsActions from '~/store/ducks/projects';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import NewProject from '../NewProject';
+import Can from '../Can';
 
 import styles from './styles';
 
@@ -67,11 +68,13 @@ class Projects extends Component {
           )}
         />
 
-        <TouchableOpacity style={styles.newProjectButton} onPress={this.openModal}>
-          <Icon name="add" size={28} color="#fff" />
-        </TouchableOpacity>
+        <Can checkPermission="projects_create">
+          <TouchableOpacity style={styles.newProjectButton} onPress={this.openModal}>
+            <Icon name="add" size={28} color="#fff" />
+          </TouchableOpacity>
 
-        <NewProject visible={isModalOpen} onRequestClose={this.closeModal} />
+          <NewProject visible={isModalOpen} onRequestClose={this.closeModal} />
+        </Can>
       </View>
     );
   }

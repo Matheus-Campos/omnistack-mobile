@@ -17,7 +17,7 @@ import { MembersTypes } from '../ducks/members';
 export default function* rootSaga() {
   return yield all([
     init(),
-    fork(getPermissions),
+    takeLatest(AuthTypes.INIT_CHECK_SUCCESS, getPermissions),
     takeLatest(AuthTypes.SIGN_IN_REQUEST, signIn),
     takeLatest(AuthTypes.SIGN_OUT, signOut),
     takeLatest(TeamsTypes.GET_TEAMS_REQUEST, getTeams),
